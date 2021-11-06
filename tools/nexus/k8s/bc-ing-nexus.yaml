@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: List
+metadata:
+items:
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: bc-ing-docker
+      namespace: bc-nmp-tools
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "false"
+        #kubernetes.io/ingress.class: "traefik"
+        ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/proxy-body-size: 1024m
+    spec:
+      tls:
+        - hosts:
+          - dck.bc.io
+          secretName: bc-sct-tls-nexus
+      rules:
+        - host: dck.bc.io
+          http:
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: bc-srv-docker
+                    port:
+                      number: 5000
+
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: bc-ing-nexus
+      namespace: bc-nmp-tools
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "false"
+        #kubernetes.io/ingress.class: "traefik"
+        ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/proxy-body-size: 1024m
+    spec:
+      tls:
+        - hosts:
+          - nxs.bc.io
+          secretName: bc-sct-tls-nexus
+      rules:
+        - host: nxs.bc.io
+          http:
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+                backend:
+                  service:
+                    name: bc-srv-nexus
+                    port:
+                      number: 80

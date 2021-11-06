@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: bc-isr-nexus
+  namespace: bc-nmp-tools
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bc-crt-nexus
+  namespace: bc-nmp-tools
+spec:
+  dnsNames:
+    - nxs.bc.io
+    - dck.bc.io
+  secretName: bc-sct-tls-nexus
+  issuerRef:
+    name: bc-isr-nexus

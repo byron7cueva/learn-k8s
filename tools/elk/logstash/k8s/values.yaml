@@ -1,0 +1,47 @@
+logstashConfig:
+  logstash.yml: |
+    http.host: 0.0.0.0
+    path.config: /usr/share/logstash/pipeline
+  logstash.conf: |
+    # all input will come from filebeat, no local logs
+    input {
+      beats: {
+        port => 5044
+      }
+    }
+    filter {
+      grok {
+        break_on_match => true
+        match => { "message" => "%{TIMESTAMP_ISO8601:datetime} - %{LOGLEVEL:level} - service: %{PROG:service} - accountId: %{UUID:accountId} - %{GREEDYDATA:message}"}
+      }
+    }
+    filter {
+      if "raw" not in [source] {
+        json {
+          tag_on_failure => true
+          source => "message"
+        }
+      }
+    }
+    output {
+      # Si no fallo el grok que lo inserte en el indice
+      if "_grokparsefailure" not in [tags] {
+        elasticsearch {
+          index => "plainlogs-%{[@metadata][beat]}"
+          hosts => [ "${ES_HOST}" ]
+          #user => "${ES_USER}"
+          #password => "${ES_PASSWORD}"
+          #cacert => '/etc/logstash/certificates/ca.crt'
+        }
+      }
+      # Si viene un dato my-app en un campo app-name
+      if "my-app" == [app-name] {
+        elasticsearch {
+          index => "jsonlogs-%{[@metadata][beat]}"
+          host => [ "${ES_HOST}" ]
+          #user => "${ES_USER}"
+          #password => "${ES_PASSWORD}"
+          #cacert => '/etc/logstash/certificates/ca.crt'
+        }
+      }
+    }

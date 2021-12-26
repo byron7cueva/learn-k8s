@@ -24,6 +24,9 @@ ports:
   - port: 443:443
     nodeFilters:
       - loadbalancer
+  - port: 5432:5432
+    nodeFilters:
+      - loadbalancer
 #registries: # define how registries should be created or used
 #  create: # creates a default registry to be used with the cluster; same as `--registry-create registry.localhost`
 #    name: dck.bc.io

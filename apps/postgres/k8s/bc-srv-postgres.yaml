@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bc-srv-postgres
+  namespace: bc-nmp-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5432
+      protocol: TCP
+  externalIPs:
+    - 192.168.1.120
+  selector:
+    app: postgres

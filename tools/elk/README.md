@@ -1,0 +1,1 @@
+helm template kibana elastic/kibana > kibana.yaml

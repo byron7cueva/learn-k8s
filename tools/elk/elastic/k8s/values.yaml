@@ -8,6 +8,8 @@ sysctlInitContainer:
 esConfig:
   elasticsearch.yml: |
     node.store.allow_mmap: false
+    xpack.security.enabled: false
+
 # Permit co-located instances for solitary minikube virtual machines.
 antiAffinity: "soft"
 
@@ -22,3 +24,6 @@ resources:
   limits:
     cpu: "1000m"
     memory: "512M"
+
+nodeSelector:
+    node: tools

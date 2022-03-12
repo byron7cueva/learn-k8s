@@ -13,11 +13,11 @@ helm template filebeat --version 7.16.2 elastic/filebeat > filebeat.yaml
 ## Intall with custom values
 
 ```shell
-helm install filebeat --version 7.16.2 elastic/filebeat -f values.yaml -n elastic
+helm install filebeat --version 7.16.2 elastic/filebeat -f values.yaml
 ```
 
 ## Uninstall
 
 ```shell
-helm uninstall filebeat -n elastic
+helm uninstall filebeat
 ```

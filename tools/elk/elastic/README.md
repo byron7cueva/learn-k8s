@@ -13,7 +13,15 @@ helm template elasticsearch --version 7.16.2 elastic/elasticsearch > elasticsear
 ## Intall with custom values
 
 ```shell
-helm install elasticsearch --version 7.16.2 elastic/elasticsearch -f values.yaml -n elastic
+helm install elasticsearch --version 7.16.2 elastic/elasticsearch -f values.yaml -n kc-elk
+kubectl get pods --namespace=kc-elk -l app=elasticsearch-master -w2
+helm --namespace=kc-elk test elasticsearch
+```
+
+## Uninstall
+
+```shell
+helm uninstall elasticsearch -n kc-elk
 ```
 
 ## Install Ingress
@@ -21,3 +29,6 @@ helm install elasticsearch --version 7.16.2 elastic/elasticsearch -f values.yaml
 ```shell
 kubectl create -f ingress.yaml
 ```
+
+kubectl label nodes worker node=tools
+kubectl get nodes --show-labels

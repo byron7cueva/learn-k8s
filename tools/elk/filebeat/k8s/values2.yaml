@@ -1,0 +1,11 @@
+filebeatConfig:
+  filebeat.yml: |
+    filebeat.inputs:
+    - type: container
+      enabled: true
+      paths:
+        - /var/log/containers/*.log
+
+    output.logstash:
+      # service.namespace:port
+      hosts: logstash-logstash-headless.kc-elk:5044

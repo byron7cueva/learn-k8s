@@ -13,7 +13,13 @@ helm template kibana --version 7.16.2 elastic/kibana > kibana.yaml
 ## Intall with custom values
 
 ```shell
-helm install kibana --version 7.16.2 elastic/kibana -f values.yaml -n elastic
+helm install kibana --version 7.16.2 elastic/kibana -f values.yaml -n kc-elk
+```
+
+## Uninstall
+
+```shell
+helm uninstall kibana -n kc-elk
 ```
 
 ## Install Ingress
@@ -21,3 +27,5 @@ helm install kibana --version 7.16.2 elastic/kibana -f values.yaml -n elastic
 ```shell
 kubectl create -f ingress.yaml
 ```
+
+kubectl exec --stdin --tty shell-demo -- /bin/bash

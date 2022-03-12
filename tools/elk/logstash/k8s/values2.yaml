@@ -1,0 +1,38 @@
+nodeSelector:
+    node: tools
+
+persistence:
+  enabled: true
+
+hostAliases:
+  - ip: "192.168.1.121"
+    hostnames:
+    - "elastic.by.io"
+
+extraEnvs:
+  - name: ES_HOSTS
+    value: http://elastic.by.io
+
+logstashConfig:
+  logstash.yml: |
+    http.host: 0.0.0.0
+    xpack.monitoring.enabled: false
+  logstash.conf: |
+    input {
+      beats: {
+        port => 5044
+      }
+    }
+    filter {
+      grok {
+        match => { "message" => "%{TIMESTAMP_ISO8601:Date}  %{LOGLEVEL:Level} %{INT:ProcessID} --- \[%{DATA:ThreadName}\] %{JAVACLASS:Class} : %{GREEDYDATA:LogMessage}" }
+      }
+    }
+    output {
+      elasticsearch {
+        index => "logstash-%{[@metadata][beat]}"
+        hosts => [ "${ES_HOSTS}" ]
+        #user => "elastic"
+        #password => "elastic"
+      }
+    }

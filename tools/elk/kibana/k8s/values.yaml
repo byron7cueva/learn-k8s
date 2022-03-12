@@ -1,1 +1,9 @@
-elasticsearchHosts: "http://10.43.79.29:9200"
+hostAliases:
+  - ip: "192.168.1.121"
+    hostnames:
+    - "elastic.by.io"
+
+elasticsearchHosts: "http://elastic.by.io"
+
+nodeSelector:
+    node: tools
